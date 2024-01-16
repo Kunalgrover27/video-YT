@@ -2,12 +2,12 @@ import mongoose,{Schema} from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 const userSchema=new Schema({
-    username:{
+    username: {
         type: String,
         required: true,
         unique: true,
         lowercase: true,
-        trim: true,
+        trim: true, 
         index: true
     },
     email:{
@@ -21,7 +21,7 @@ const userSchema=new Schema({
         type: String,
         required: true,
         trim: true,
-        index: ture
+        index: true
     },
     avatar:{
         type: String, // cloud
