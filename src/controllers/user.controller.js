@@ -14,7 +14,7 @@ const registerUser = asyncHandler( async(req,res) => {
     // remove password and refresh token field from response
     // check for user creation
     // return res
-
+    console.log(req.body);
     const{fullName, email, username, password} = req.body;
 
     if(
@@ -33,7 +33,12 @@ const registerUser = asyncHandler( async(req,res) => {
     }
     // file multer
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath= req.files?.coverImage[0]?.path;
+    
+    let coverImageLocalPath
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+     coverImageLocalPath= req.files.coverImage[0].path;
+    }   
+
 
     if(!avatarLocalPath){
         throw new ApiError(400,"avatar file is required22")
