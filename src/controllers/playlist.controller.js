@@ -9,11 +9,35 @@ const createPlaylist = asyncHandler(async (req, res) => {
     const {name, description} = req.body
 
     //TODO: create playlist
+    if(!name || !description){
+        throw new ApiError(300,"name and description required")
+    }
+    
+    const exist= await Playlist.findOne({
+        name:name,
+        })
+
+        if(exist){
+            throw new ApiError(200,"playlist with same name already exists");
+        }
+
+    const playlist= await Playlist.create({
+        name,
+        description,
+        owner: req.user?._id,
+    });
+    if (!playlist) {
+        throw new ApiError(500, "failed to create playlist");
+    }
+
+    return res.status(200)
+    .json(new ApiResponse(200,"playlist created successfully"));
 })
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
     const {userId} = req.params
     //TODO: get user playlists
+    
 })
 
 const getPlaylistById = asyncHandler(async (req, res) => {
