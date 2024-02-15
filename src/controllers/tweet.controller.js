@@ -36,6 +36,36 @@ const createTweet = asyncHandler(async (req, res) => {
 
 const getUserTweets = asyncHandler(async (req, res) => {
     // TODO: get user tweets
+    const user=req.user;
+    if(!user){
+        throw new ApiError(200,"user not found")
+    }
+    const tweet= await Tweet.aggregate([
+        {
+            $match:{
+                owner:req.user
+            }
+        },
+        {
+            $lookup:{
+                from: "users",
+                localField:"owner",
+                foreignField:"_id",
+                as:"tweet",
+             pipeline:[{
+                    $project:{fullname:1, username:1,avatar:1}
+                }]
+            }
+        },
+       {
+        $addFields:{
+            owner:{
+                $first:"$owner"
+            }
+        }
+       }
+        
+    ])
 })
 
 const updateTweet = asyncHandler(async (req, res) => {
